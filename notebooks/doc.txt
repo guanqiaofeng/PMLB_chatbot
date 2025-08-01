@@ -1,0 +1,14 @@
+mkdir PMLB_chatbot
+cd PMLB_chatbot
+
+pixi init
+
+ 1116  pixi init
+ 1117  mkdir chatbot
+ 1118  mkdir data
+ 1119  mkdir config
+ 1120  mkdir interface
+ 1121  mkdir scripts
+ 1122  mkdir tests
+ 1123  mkdir notebooks
+ 1124  mkdir tasks
