@@ -1,8 +1,16 @@
 import requests
+import json
+import re
+from chatbot.schema_utils import load_schema
 
-def parse_with_llm(user_input: str) -> dict:
-    prompt = f"""
-You are a Labguru assistant. Given a user's message, extract the **intent** and any optional **filters**.
+def build_prompt(user_input: str, schema: dict) -> str:
+    schema_description = json.dumps(schema, indent=2)
+    return f"""
+You are a Labguru assistant. The database schema is:
+
+{schema_description}
+
+Given a user's message, extract the **intent** and any optional **filters**.
 
 Respond **only** with valid JSON using this structure:
 
@@ -35,16 +43,32 @@ Response:
 }}
 
 Now extract intent and filters from:
+
 User: {user_input}
 """
+
+def parse_with_llm(user_input: str) -> dict:
+    schema = load_schema()
+    prompt = build_prompt(user_input, schema)
+
     response = requests.post("http://localhost:11434/api/generate", json={
         "model": "llama3",
         "prompt": prompt,
         "stream": False
     })
 
+    raw = response.json().get("response", "")
+    
     try:
-        return response.json()["response"]
+        # Try to extract JSON using regex (the first {...} block)
+        match = re.search(r'{.*}', raw, re.DOTALL)
+        if match:
+            json_str = match.group(0)
+            parsed = json.loads(json_str)
+            return parsed
+        else:
+            raise ValueError("No JSON block found")
     except Exception as e:
-        print("LLM failed:", e)
+        print("⚠️ LLM failed:", e)
+        print("Raw response:", raw)
         return {"intent": "unknown"}

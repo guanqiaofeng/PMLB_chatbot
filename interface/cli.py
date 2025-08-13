@@ -41,19 +41,10 @@ def main():
             break
 
         print("🤖 Parsing with LLaMA3...")
-        response_text = parse_with_llm(user_input)
-
-        try:
-            # Clean up backticks or code block formatting
-            cleaned = re.sub(r"^```(?:json)?|```$", "", response_text.strip(), flags=re.MULTILINE).strip()
-            parsed = json.loads(cleaned)
-            
-            intent = parsed.get("intent")
-            filters = parsed.get("filters", {})
-            handle_intent(intent, filters)
-        except Exception as e:
-            print("⚠️ Failed to interpret response:", e)
-            print("Raw response:", response_text)
+        parsed = parse_with_llm(user_input)
+        intent = parsed.get("intent")
+        filters = parsed.get("filters", {})
+        handle_intent(intent, filters)
 
 if __name__ == "__main__":
     main()

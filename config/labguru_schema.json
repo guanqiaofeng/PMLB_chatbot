@@ -1,6 +1,117 @@
 {
-    "PMLB_case": ["id", "name", "patient_id", "diagnosis"],
-    "PMLB_specimen": ["id", "name", "tissue_type", "date_collected"],
-    "PMLB_organoid": ["id", "name", "origin_case_id", "passage_number"],
-    "PMLB_xenograft": ["id", "name", "strain", "engraftment_date"]
+    "PMLB_case": {
+      "children": ["PMLB_specimen"],
+      "fields": ["id", "name", "auto_name", "case_PPID", "stem_PPID", "primary_study_id", 
+                "sex", "oncotree_code", "primary_tumor_site", "cancer_type_detailed",
+                "smoke_history", "smoke_pack_year(PY)", "ethnicity_self_assessed", 
+                "ethnicity_genome", "alias.id"
+                ]
+    },
+    "PMLB_specimen": {
+      "parent": "PMLB_case",
+      "children": ["PMLB_organoid", "PMLB_xenograft", "WGS", "WES", "RNAseq", "ATAC"],
+      "fields": ["id", "name", "auto_name", "associate_study", "alias.id", "sample_class", 
+                "tumor_normal_designation", "primary_recurrence_metastasis", "TNM_stage",
+                "specimen_collection_site", "specimen_collection_date","procedure", 
+                "distributed_specimen_label", "specimen_barcode", "specimen_processor",
+                "SNAP_status", "history_blockID", "specimen_weight(g)", "specimen_volume(mL)",
+                "cell_yield(x10^6)", "specimen_comment"
+                ]
+    },
+    "PMLB_organoid": {
+      "parent": "PMLB_specimen",
+      "children": ["growth_assay", "pathogen_assay", "flow_assay", "STR_assay", 
+                "histology_assay", "WGS", "WES", "RNAseq", "ATAC"],
+      "fields": ["id", "name", "auto_name","organoid_PPID","primary_study_name",
+                "associate_studies","alias.id","sample_class","source_xenograft_modeID",
+                "source_xenograft_passage","source_xenograft_collection_date",
+                "source_xenograft_collection_note","sample_SNAP_status","sample_histo/blockID",
+                "sample_weight(g)","sample_volume(mL)","sample_cell_yield(x10^6)",
+                "model_generated_by","model_generation_date","media","split_ratio",
+                "passage_interval(day)","culture_note","long_term_organoid","PMLB_banked_status",
+                "PMLB_banked_location","PMLB_banked_comments","PMLB_banked_date","PMLB_banked_by",
+                "deposit_distribution_permission","tumor_normal_designation","organoid_comment"
+                ]
+    },
+    "PMLB_xenograft": {
+      "parent": "PMLB_specimen",
+      "children": ["pathogen_assay", "STR_assay", "histology_assay", "WGS", "WES", "RNAseq", "ATAC"],
+      "fields": ["id", "name", "auto_name", "xenograft_PPID", "primary_study_name", 
+                "associate_studies", "alias.id", "sample_class", "source_organoid_modeID", 
+                "source_organoid_passage", "source_organoid_collection_date", "sample_SNAP_status", 
+                "sample_histo/blockID", "sample_weight(g)", "model_generated_by", "model_generation_date", 
+                "host_strain_name", "host_strain_nomenclature", "engraftment_site", "engraftment_type", 
+                "engraftment_material", "engraftment_material_status", "pubmed_ID","certis_id"
+                ]
+    },
+    "flow_assay": {
+      "parent": "PMLB_organoid",
+      "fields": ["id", "name", "auto_name", "passage_number", "flow_assay_date", 
+                "flow_assay_technician", "CD326", "mH2K", "CD133", "flow_assay_comment"
+                ]
+    },
+    "growth_assay": {
+        "parent": "PMLB_organoid",
+        "fields": ["id", "name", "auto_name", "passage_number", "doubling_rate", 
+                "growth_assay_date", "growth_assay_technician", "growth_assay_comment"
+                ]
+    },
+    "histology_assay": {
+      "parent": ["PMLB_organoid","PMLB_xenograft"],
+      "fields": ["id", "name", "auto_name", "passage_number", "histology_assay_date", 
+                "block_number", "histology_results", "IHC", "histology_assay_technician",
+                "histology_assay_comment"
+                ]
+    },
+    "pathogen_assay": {
+      "parent": ["PMLB_organoid","PMLB_xenograft"],
+      "fields": ["id", "name", "auto_name", "passage_number", "pathogen_assay_order_number", 
+                "pathogen_assay_type", "pathogen_assay_date", "pathogen_assay_technician", 
+                "pathogen_result", "pathogen_assay_comment"
+                ]
+    },
+    "STR_assay": {
+      "parent": ["PMLB_organoid","PMLB_xenograft"],
+      "fields": ["id", "name", "auto_name", "passage_number", "STR_assay_date", 
+                "control", "control_type", "%match", "STR_assay_technician", 
+                "STR_assay_comment"
+                ]
+    },
+    "ATAC": {
+      "parent": ["PMLB_organoid","PMLB_xenograft"],
+      "fields": ["id", "name", "auto_name", "passage_number", "library_kit",
+                "sequencing_platform", "sequencing_company", "quote_number",
+                "expected_depth", "actual_depth", "humam_genome_depth", "read_length",
+                "single_or_paired_end", "sequencing_submitter", "sequencing_submission_date",
+                "sequence_pass_qc", "fastq_directory", "fastq_path", "sequence_sample_id"
+                ]
+    },
+    "RNAseq": {
+      "parent": ["PMLB_organoid","PMLB_xenograft"],
+      "fields": ["id", "name", "auto_name", "passage_number", "library_kit",
+                "sequencing_platform", "sequencing_company", "quote_number",
+                "expected_depth", "actual_depth", "humam_genome_depth", "read_length",
+                "single_or_paired_end", "sequencing_submitter", "sequencing_submission_date",
+                "sequence_pass_qc", "fastq_directory", "fastq_path", "sequence_sample_id"
+                ]
+    },
+    "WGS": {
+      "parent": ["PMLB_organoid","PMLB_xenograft"],
+      "fields": ["id", "name", "auto_name", "passage_number", "library_kit",
+                "sequencing_platform", "sequencing_company", "quote_number",
+                "expected_depth", "actual_depth", "humam_genome_depth", "read_length",
+                "single_or_paired_end", "sequencing_submitter", "sequencing_submission_date",
+                "sequence_pass_qc", "fastq_directory", "fastq_path", "sequence_sample_id"
+                ]
+    },
+    "WES": {
+      "parent": ["PMLB_organoid","PMLB_xenograft"],
+      "fields": ["id", "name", "auto_name", "passage_number", "library_kit",
+                "sequencing_platform", "sequencing_company", "quote_number",
+                "expected_depth", "actual_depth", "humam_genome_depth", "read_length",
+                "single_or_paired_end", "sequencing_submitter", "sequencing_submission_date",
+                "sequence_pass_qc", "fastq_directory", "fastq_path", "sequence_sample_id"
+                ]
+    }
 }
+  
