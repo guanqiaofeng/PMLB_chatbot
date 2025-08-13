@@ -12,41 +12,48 @@ from chatbot.labguru_api import (
     list_RNAseq,
     list_ATAC
 )
+from chatbot.nlu_llm import parse_with_llm
+import json
+import re
 
-def handle_query(user_input: str) -> str:
-    """Route user input to the appropriate Labguru function."""
-    user_input = user_input.lower()
+def handle_intent(intent, filters):
+    if intent == "count_specimens":
+        specimens = list_pmlb_specimens()
+        print(f"✅ Found {len(specimens)} PMLB specimens.")
+    elif intent == "list_organoids":
+        organoids = list_pmlb_organoids()
+        prefix = filters.get("organoid_name_startswith", "").lower()
+        filtered = [o for o in organoids if o.get("name", "").lower().startswith(prefix)]
+        for org in filtered:
+            print(f"- {org.get('name')}")
+        print(f"✅ Found {len(filtered)} organoids starting with '{prefix}'.")
+    else:
+        print("❓Sorry, I didn't understand that request.")
 
-    try:
-        if "case" in user_input:
-            items = list_pmlb_cases()
-            return f"✅ Found {len(items)} PMLB cases."
-        elif "specimen" in user_input:
-            items = list_pmlb_specimens()
-            return f"✅ Found {len(items)} PMLB specimens."
-        elif "organoid" in user_input:
-            items = list_pmlb_organoids()
-            return f"✅ Found {len(items)} PMLB organoids."
-        elif "xenograft" in user_input:
-            items = list_pmlb_xenografts()
-            return f"✅ Found {len(items)} PMLB xenografts."
-        else:
-            return "❌ Sorry, I didn't understand that."
-    except Exception as e:
-        return f"❌ Error: {e}"
-
-def start_chat():
+def main():
     print("💬 Welcome to the PMLB Labguru Chatbot!")
-    print("Type something like 'show me all specimens'. Type 'exit' to quit.\n")
+    print("Type something like 'how many specimens' or 'list organoids starting with CSC'. Type 'exit' to quit.\n")
 
     while True:
-        user_input = input("> ")
-        if user_input.strip().lower() == "exit":
+        user_input = input("> ").strip()
+        if user_input.lower() in ("exit", "quit"):
             print("👋 Goodbye!")
             break
 
-        response = handle_query(user_input)
-        print(response)
+        print("🤖 Parsing with LLaMA3...")
+        response_text = parse_with_llm(user_input)
+
+        try:
+            # Clean up backticks or code block formatting
+            cleaned = re.sub(r"^```(?:json)?|```$", "", response_text.strip(), flags=re.MULTILINE).strip()
+            parsed = json.loads(cleaned)
+            
+            intent = parsed.get("intent")
+            filters = parsed.get("filters", {})
+            handle_intent(intent, filters)
+        except Exception as e:
+            print("⚠️ Failed to interpret response:", e)
+            print("Raw response:", response_text)
 
 if __name__ == "__main__":
-    start_chat()
+    main()

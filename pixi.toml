@@ -9,6 +9,7 @@ version = "0.1.0"
 test_cases = "python3 -m scripts.test_list_pmlb_cases"
 test_specimen = "python3 -m scripts.test_all_pmlb_specimen"
 test_all = "python3 -m scripts.test_all_schema"
+test_llm_call = "python3 -m scripts.test_llm_call"
 chat = "python interface/cli.py"
 
 [dependencies]

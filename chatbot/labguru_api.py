@@ -69,64 +69,11 @@ def list_histology_assay():
 def list_WES():
     return get_all_pages("biocollections", "WES")
 
+def list_WGS():
+    return get_all_pages("biocollections", "WGS")
+
 def list_RNAseq():
     return get_all_pages("biocollections", "RNAseq")
 
 def list_ATAC():
     return get_all_pages("biocollections", "ATAC")
-
-# def get(endpoint: str, params: dict = None):
-#     """
-#     Generic GET request to Labguru using token as query param.
-#     """
-#     if params is None:
-#         params = {}
-
-#     # Inject token into query string (not headers!)
-#     params["token"] = LABGURU_API_TOKEN
-
-#     url = f"{BASE_URL}/api/v1/{endpoint}"
-#     response = requests.get(url, headers={"Accept": "application/json"}, params=params)
-#     response.raise_for_status()
-#     return response.json()
-
-
-
-# def get_biocollection_items(collection_name: str, page: int = 1, include_meta: bool = False):
-#     """
-#     Retrieve items from a specific generic biocollection, e.g., 'PMLB_case'.
-
-#     Args:
-#         collection_name (str): Name of the biocollection (e.g., 'PMLB_case')
-#         page (int): Page number for pagination
-#         include_meta (bool): Whether to return metadata only
-
-#     Returns:
-#         list or dict: Collection items (or metadata if meta=true)
-#     """
-#     params = {"page": page}
-#     if include_meta:
-#         params["meta"] = "true"
-#     return get(f"biocollections/{collection_name}", params=params)
-
-
-# # ---- Optional Convenience Wrappers for Each Collection ----
-
-# def list_pmlb_cases(page: int = 1):
-#     """List all PMLB_case entries."""
-#     return get_biocollection_items("PMLB_case", page=page)
-
-
-# def list_pmlb_specimens(page: int = 1):
-#     """List all PMLB_specimen entries."""
-#     return get_biocollection_items("PMLB_specimen", page=page)
-
-
-# def list_pmlb_organoids(page: int = 1):
-#     """List all PMLB_organoid entries."""
-#     return get_biocollection_items("PMLB_organoid", page=page)
-
-
-# def list_pmlb_xenografts(page: int = 1):
-#     """List all PMLB_xenograft entries."""
-#     return get_biocollection_items("PMLB_xenograft", page=page)

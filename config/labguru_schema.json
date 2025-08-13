@@ -1,0 +1,6 @@
+{
+    "PMLB_case": ["id", "name", "patient_id", "diagnosis"],
+    "PMLB_specimen": ["id", "name", "tissue_type", "date_collected"],
+    "PMLB_organoid": ["id", "name", "origin_case_id", "passage_number"],
+    "PMLB_xenograft": ["id", "name", "strain", "engraftment_date"]
+}
