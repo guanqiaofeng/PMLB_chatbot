@@ -12,3 +12,12 @@ pixi init
  1122  mkdir tests
  1123  mkdir notebooks
  1124  mkdir tasks
+
+added labguru_api.py
+ - access labguru api 
+ - retrive all data for all schema
+
+added test 
+ - test_case 
+ - test_specimen
+ - test_all output summary of all schema

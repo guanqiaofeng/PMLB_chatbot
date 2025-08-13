@@ -1,0 +1,14 @@
+[project]
+name = "pmlb_chatbot"
+version = "0.1.0"
+description = "A Labguru-integrated chatbot for querying PMLB data"
+authors = [{ name = "Your Name" }]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+chat = "interface.cli:start_chat"
+
+[tool.setuptools.packages.find]
+where = ["."]
