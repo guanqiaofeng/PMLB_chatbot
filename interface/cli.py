@@ -70,7 +70,7 @@ def handle_intent(intent, filters):
             name_key = "name"
 
             # Optional prefix filter (like "name starts with")
-            prefix = filters.get(f"{resource}_name_startswith", "").lower()
+            prefix = filters.get(f"{resource_raw}_name_startswith", "").lower()
             if prefix:
                 items = [item for item in items if item.get(name_key, "").lower().startswith(prefix)]
                 for item in items:
@@ -109,7 +109,13 @@ def main():
         elif intent is None:
             print("❓Sorry, I didn't understand that request.")
             return
-        filters = parsed.get("filters", {})
+        
+        # After intent fix
+        filters = {
+            key.replace(resource, normalized_resource): value
+            for key, value in parsed.get("filters", {}).items()
+        }
+
         handle_intent(intent, filters)
 
 if __name__ == "__main__":

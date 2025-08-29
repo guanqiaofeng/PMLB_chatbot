@@ -35,7 +35,7 @@ Valid intents:
 - "count_WGS"
 - "count_RNAseq"
 - "count_ATAC"
-- "list_case"
+- "list_cases"
 - "list_specimens"
 - "list_organoids"
 - "list_xenografts"
@@ -50,8 +50,20 @@ Valid intents:
 - "list_ATAC"
 
 Valid filters:
-- "organoids_name_startswith"
+- "cases_name_startswith"
 - "specimens_name_startswith"
+- "organoids_name_startswith"
+- "xenografts_name_startswith"
+- "growth_assay_name_startswith"
+- "pathogen_assay_name_startswith"
+- "flow_assay_name_startswith"
+- "STR_assay_name_startswith"
+- "histology_assay_name_startswith"
+- "WES_name_startswith"
+- "WGS_name_startswith"
+- "RNAseq_name_startswith"
+- "ATAC_name_startswith"
+
 
 Example:
 User: list all organoids starting with CSC  
