@@ -12,7 +12,7 @@ You are a Labguru assistant. The database schema is:
 
 Given a user's message, extract the **intent** and any optional **filters**.
 
-Respond **only** with valid JSON using this structure:
+Respond ONLY with a valid JSON object using below structure and no other text or explanation. No markdown, no preamble.
 
 {{
   "intent": "<intent_name>",
@@ -25,12 +25,33 @@ Valid intents:
 - "count_case"
 - "count_specimens"
 - "count_organoids"
-- "list_organoids"
+- "count_xenografts"
+- "count_growth_assay"
+- "count_pathogen_assay"
+- "count_flow_assay"
+- "count_STR_assay"
+- "count_histology_assay"
+- "count_WES"
+- "count_WGS"
+- "count_RNAseq"
+- "count_ATAC"
+- "list_case"
 - "list_specimens"
+- "list_organoids"
+- "list_xenografts"
+- "list_growth_assay"
+- "list_pathogen_assay"
+- "list_flow_assay"
+- "list_STR_assay"
+- "list_histology_assay"
+- "list_WES"
+- "list_WGS"
+- "list_RNAseq"
+- "list_ATAC"
 
 Valid filters:
-- "organoid_name_startswith"
-- "specimen_name_startswith"
+- "organoids_name_startswith"
+- "specimens_name_startswith"
 
 Example:
 User: list all organoids starting with CSC  
@@ -38,7 +59,7 @@ Response:
 {{
   "intent": "list_organoids",
   "filters": {{
-    "organoid_name_startswith": "CSC"
+    "organoids_name_startswith": "CSC"
   }}
 }}
 
@@ -57,18 +78,20 @@ def parse_with_llm(user_input: str) -> dict:
         "stream": False
     })
 
-    raw = response.json().get("response", "")
-    
+    raw_text = response.json().get("response", "")
+
+    # Extract first valid JSON block using regex
+    match = re.search(r"{.*}", raw_text, re.DOTALL)
+    if not match:
+        print("⚠️ LLM failed: No JSON block found")
+        print("Raw response:", raw_text)
+        return {"intent": "unknown"}
+
+    json_str = match.group(0)
     try:
-        # Try to extract JSON using regex (the first {...} block)
-        match = re.search(r'{.*}', raw, re.DOTALL)
-        if match:
-            json_str = match.group(0)
-            parsed = json.loads(json_str)
-            return parsed
-        else:
-            raise ValueError("No JSON block found")
+        parsed = json.loads(json_str)
+        return parsed
     except Exception as e:
-        print("⚠️ LLM failed:", e)
-        print("Raw response:", raw)
+        print("⚠️ Failed to parse JSON:", e)
+        print("Raw matched block:", json_str)
         return {"intent": "unknown"}
