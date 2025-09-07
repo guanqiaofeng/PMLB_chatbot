@@ -32,7 +32,7 @@ This chatbot allows users to:
 
 1. Install Pixi (if not already)
    
-   See: https://prefix.dev/docs/pixi/
+   See: [Pixi installation doc](https://pixi.sh/latest/installation/)
 
 2. Run the chatbot
 ```
@@ -78,8 +78,8 @@ A typical parsed LLM response looks like:
 
 ## 🔮 Roadmap
 
-- integrate Q & A base LLM agent
-- integrate Knowledge graph based LLM agent
+- integrate Q & A base LLM agent (langchain)
+- integrate Knowledge graph based LLM agent (langchain)
 - Add RAG-based querying for unstructured text (path reports, notes)
 - Web UI
 - Authentication and multi-user support
