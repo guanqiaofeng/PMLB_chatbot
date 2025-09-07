@@ -25,7 +25,7 @@ This chatbot allows users to:
 ├── interface/
 │   ├── cli.py               # CLI interface for the chatbot
 ├── pixi.toml                # Pixi environment and dependencies
-├── README.md                # You’re here
+├── README.md
 ```
 
 ## 🚀 How to Run
